@@ -1,0 +1,18 @@
+version: "3.1"
+
+services:
+  spk_cli:
+    image: mkenjis/ubpyspkcli_yarn_img
+    deploy:
+      placement:
+        constraints:
+          - node.labels.hostlabel == hdpmst
+    networks:
+      - mynet
+    environment:
+      - HADOOP_HOST_MASTER=hdpmst
+
+networks:
+  mynet:
+    external:
+       name: mynet
