@@ -1,4 +1,4 @@
-# Spark client running into YARN cluster in Docker
+# Jupyter client running into YARN cluster in Docker
 
 Apache Spark is an open-source, distributed processing system used for big data workloads.
 
@@ -8,10 +8,10 @@ This Docker image contains Spark binaries prebuilt and uploaded in Docker Hub.
 
 ## Build Spark image
 ```shell
-$ wget https://archive.apache.org/dist/spark/spark-2.3.2/spark-2.3.2-bin-hadoop2.7.tgz
-$ docker image build -t mkenjis/ubspkcli_yarn_img .
+$ wget https://archive.apache.org/dist/spark/spark-3.0.3/spark-3.0.3-bin-hadoop2.7.tgz
+$ docker image build -t mkenjis/ubspypkcli_yarn_img .
 $ docker login   # provide user and password
-$ docker image push mkenjis/ubspkcli_yarn_img
+$ docker image push mkenjis/ubpyspkcli_yarn_img
 ```
 
 ## Shell Scripts Inside 
@@ -87,28 +87,42 @@ e9ceb97de97a   mkenjis/ubhdpclu_vol_img:latest           "/usr/bin/supervisord" 
 $ docker container exec -it <spk_cli ID> bash
 ```
 
-2. start spark-shell
+8. run jupyter notebook --generate-config
 ```shell
-$ spark-shell --master yarn
-2021-12-05 11:09:14 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-2021-12-05 11:09:40 WARN  Client:66 - Neither spark.yarn.jars nor spark.yarn.archive is set, falling back to uploading libraries under SPARK_HOME.
-Spark context Web UI available at http://802636b4d2b4:4040
-Spark context available as 'sc' (master = yarn, app id = application_1638723680963_0001).
-Spark session available as 'spark'.
-Welcome to
-      ____              __
-     / __/__  ___ _____/ /__
-    _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 2.3.2
-      /_/
-         
-Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_181)
-Type in expressions to have them evaluated.
-Type :help for more information.
-
-scala> 
+$ jupyter notebook --generate-config
 ```
 
+9. edit /root/.jupyter/jupyter_notebook_config.py
+```shell
+$ vi /root/.jupyter/jupyter_notebook_config.py
+c.NotebookApp.ip = '*'
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 8082
+```
 
+10. setup a jupyter password
+```shell
+$ jupyter notebook password
+Enter password:  *********
+Verify password: *********
+```
+
+11. run pyspark
+```shell
+PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --allow-root --port=8082" pyspark --master spark://<hostname>:7077
+```
+
+12. in the browser, issue the address https://host:8082 to access the Jupyter Notebook.
+
+Provide the credentials previously created
+
+![JUPYTER home](docs/jupyter-login.png)
+
+Click on New button to start a new notebook. Choose Python3 as interpreter
+
+![JUPYTER home](docs/jupyter-python-notebook.png)
+
+Issue Spark commands
+
+![JUPYTER home](docs/jupyter-python-spark.png)
+![JUPYTER home](docs/jupyter-python-spark_1.png)
