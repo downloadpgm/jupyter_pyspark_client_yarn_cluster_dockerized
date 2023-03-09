@@ -72,7 +72,7 @@ wym7psnwca4n   hdp_hdpmst.1   mkenjis/ubhdpclu_vol_img:latest   node1     Runnin
 $ docker stack deploy -c docker-compose.yml spk
 $ docker service ls
 ID             NAME          MODE         REPLICAS   IMAGE                                 PORTS
-xf8qop5183mj   spk_spk_cli   replicated   0/1        mkenjis/ubspkcli_yarn_img:latest
+xf8qop5183mj   spk_spk_cli   replicated   0/1        mkenjis/ubpyspkcli_yarn_img:latest
 ```
 
 ## Set up Spark client
@@ -81,18 +81,18 @@ xf8qop5183mj   spk_spk_cli   replicated   0/1        mkenjis/ubspkcli_yarn_img:l
 ```shell
 $ docker container ls   # run it in each node and check which <container ID> is running the Spark client constainer
 CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS         PORTS                                          NAMES
-8f0eeca49d0f   mkenjis/ubspkcli_yarn_img:latest   "/usr/bin/supervisord"   3 minutes ago   Up 3 minutes   4040/tcp, 7077/tcp, 8080-8082/tcp, 10000/tcp   yarn_spk_cli.1.npllgerwuixwnb9odb3z97tuh
-e9ceb97de97a   mkenjis/ubhdpclu_vol_img:latest           "/usr/bin/supervisord"   4 minutes ago   Up 4 minutes   9000/tcp                                       yarn_hdp1.1.58koqncyw79aaqhirapg502os
+8f0eeca49d0f   mkenjis/ubpyspkcli_yarn_img:latest   "/usr/bin/supervisord"   3 minutes ago   Up 3 minutes   4040/tcp, 7077/tcp, 8080-8082/tcp, 10000/tcp   spk_spk_cli.1.npllgerwuixwnb9odb3z97tuh
+e9ceb97de97a   mkenjis/ubhdpclu_vol_img:latest           "/usr/bin/supervisord"   4 minutes ago   Up 4 minutes   9000/tcp                                       hdp_hdp1.1.58koqncyw79aaqhirapg502os
 
 $ docker container exec -it <spk_cli ID> bash
 ```
 
-8. run jupyter notebook --generate-config
+2. run jupyter notebook --generate-config
 ```shell
 $ jupyter notebook --generate-config
 ```
 
-9. edit /root/.jupyter/jupyter_notebook_config.py
+3. edit /root/.jupyter/jupyter_notebook_config.py
 ```shell
 $ vi /root/.jupyter/jupyter_notebook_config.py
 c.NotebookApp.ip = '*'
@@ -100,19 +100,19 @@ c.NotebookApp.open_browser = False
 c.NotebookApp.port = 8082
 ```
 
-10. setup a jupyter password
+4. setup a jupyter password
 ```shell
 $ jupyter notebook password
 Enter password:  *********
 Verify password: *********
 ```
 
-11. run pyspark
+5. run pyspark
 ```shell
-PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --allow-root --port=8082" pyspark --master spark://<hostname>:7077
+PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --allow-root --port=8082" pyspark --master yarn
 ```
 
-12. in the browser, issue the address https://host:8082 to access the Jupyter Notebook.
+6. in the browser, issue the address https://host:8082 to access the Jupyter Notebook.
 
 Provide the credentials previously created
 
