@@ -1,32 +1,3 @@
-# core-site.xml (HADOOP e SPARK)
-# =============
-echo '<configuration>' >$SPARK_HOME/conf/core-site.xml
-echo '  <property>' >>$SPARK_HOME/conf/core-site.xml
-echo '    <name>fs.default.name</name>' >>$SPARK_HOME/conf/core-site.xml
-echo '    <value>hdfs://'${HADOOP_HOSTNAME}':9000</value>' >>$SPARK_HOME/conf/core-site.xml
-echo '  </property>' >>$SPARK_HOME/conf/core-site.xml
-echo '</configuration>' >>$SPARK_HOME/conf/core-site.xml
-
-# hdfs-site.xml (HADOOP e SPARK)
-# =============
-echo '<configuration>' >$SPARK_HOME/conf/hdfs-site.xml
-
-echo '  <property>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <name>dfs.replication</name>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <value>1</value>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '  </property>' >>$SPARK_HOME/conf/hdfs-site.xml
-
-echo '  <property>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <name>dfs.name.dir</name>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <value>file:///data/hadoop/hdfs/namenode</value>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '  </property>' >>$SPARK_HOME/conf/hdfs-site.xml
-
-echo '  <property>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <name>dfs.data.dir</name>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '    <value>file:///data/hadoop/hdfs/datanode</value>' >>$SPARK_HOME/conf/hdfs-site.xml
-echo '  </property>' >>$SPARK_HOME/conf/hdfs-site.xml
-
-echo '</configuration>' >>$SPARK_HOME/conf/hdfs-site.xml
 
 # hive-site.xml (SPARK)
 # =============
