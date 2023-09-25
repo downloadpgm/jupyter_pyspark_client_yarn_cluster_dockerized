@@ -77,7 +77,7 @@ xf8qop5183mj   spk_spk_cli   replicated   0/1        mkenjis/ubpyspkcli_yarn_img
 
 ## Set up Spark client
 
-1. access spark client node
+1. access spark client node and setup jupyter notebook
 ```shell
 $ docker container exec -it <spk_cli ID> bash
 ```
